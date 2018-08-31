@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    >
+    <RelativeLayout
+        android:id="@+id/layout_home_tab"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_message_tab"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_home"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tabbar_home_auto" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/iv_home"
+            android:text="Weibo"
+            android:textSize="10sp"
+            android:textColor="#ff3f4042"
+
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/new_dot"
+            android:visibility="gone"
+            android:layout_alignTop="@+id/iv_home"
+            android:layout_toRightOf="@+id/iv_home"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_message_tab"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_add_tab"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/layout_home_tab">
+
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tabbar_message_auto" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:textSize="10sp"
+            android:textColor="#ff3f4042"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_below="@+id/iv_message"
+
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/new_dot"
+            android:visibility="gone"
+            android:layout_alignTop="@+id/iv_message"
+            android:layout_toRightOf="@+id/iv_message"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_add_tab"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_discovery_tab"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/layout_message_tab">
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/rect_orgin_auto"
+            android:scaleType="center"
+            android:src="@drawable/tabbar_compose_icon_add" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_discovery_tab"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_profile_tab"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/layout_add_tab">
+
+
+
+        <ImageView
+            android:id="@+id/iv_discovery"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tabbar_discover_auto" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/iv_discovery"
+            android:text="Discover"
+            android:textSize="10sp"
+            android:textColor="#ff3f4042"
+
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/new_dot"
+            android:visibility="gone"
+            android:layout_alignTop="@+id/iv_discovery"
+            android:layout_toRightOf="@+id/iv_discovery"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_profile_tab"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/layout_discovery_tab">
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tabbar_profile_auto" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/iv_profile"
+            android:text="Me"
+            android:textSize="10sp"
+            android:textColor="#ff3f4042"
+
+            />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/new_dot"
+            android:visibility="gone"
+            android:layout_alignTop="@+id/iv_profile"
+            android:layout_toRightOf="@+id/iv_profile"
+            />
+
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/lightGray"
+        app:layout_constraintBottom_toTopOf="@+id/layout_add_tab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
