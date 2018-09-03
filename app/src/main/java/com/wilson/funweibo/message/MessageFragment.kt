@@ -1,5 +1,6 @@
 package com.wilson.funweibo.message
 
+import com.wilson.funweibo.R
 import com.wilson.funweibo.base.BaseFragment
 
 /**
@@ -11,8 +12,12 @@ import com.wilson.funweibo.base.BaseFragment
  */
 class MessageFragment: BaseFragment() {
 
+    companion object {
+        const val MESSAGE = "MessageFragment"
+    }
+
     override fun inflate(): Int {
-        return 0
+        return R.layout.fragment_message
     }
 
     override fun init() {

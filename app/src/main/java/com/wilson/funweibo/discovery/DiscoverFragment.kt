@@ -1,5 +1,6 @@
 package com.wilson.funweibo.discovery
 
+import com.wilson.funweibo.R
 import com.wilson.funweibo.base.BaseFragment
 
 /**
@@ -11,11 +12,16 @@ import com.wilson.funweibo.base.BaseFragment
  */
 class DiscoverFragment: BaseFragment() {
 
-    override fun init() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    companion object {
+        const val DISCOVER = "DiscoverFragment"
     }
 
     override fun inflate(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return R.layout.fragment_discover
     }
+    override fun init() {
+
+    }
+
+
 }

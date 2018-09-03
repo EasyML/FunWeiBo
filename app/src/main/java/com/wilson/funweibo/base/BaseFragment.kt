@@ -15,15 +15,22 @@ import android.view.ViewGroup
  */
 abstract class BaseFragment: Fragment() {
 
+    abstract fun inflate(): Int
+
+    abstract fun init()
+
     lateinit var contentView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         contentView = LayoutInflater.from(context).inflate(inflate(),container,false)
-        init()
         return contentView
     }
 
-    abstract fun inflate(): Int
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
 
-    abstract fun init()
+
+
 }

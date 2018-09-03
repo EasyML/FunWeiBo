@@ -1,16 +1,24 @@
 package com.wilson.funweibo.home
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
+import com.sina.weibo.sdk.auth.AccessTokenKeeper
+import com.sina.weibo.sdk.auth.Oauth2AccessToken
+import com.sina.weibo.sdk.auth.WbAuthListener
+import com.sina.weibo.sdk.auth.WbConnectErrorMessage
+import com.sina.weibo.sdk.auth.sso.SsoHandler
 import com.wilson.funweibo.R
 import com.wilson.funweibo.discovery.DiscoverFragment
 import com.wilson.funweibo.message.MessageFragment
 import com.wilson.funweibo.profile.ProfileFragment
 import kotlinx.android.synthetic.main.main_bottom_navigation_bar.*
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener,WbAuthListener {
+
 
 
     private lateinit var home: HomeFragment
@@ -30,13 +38,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private var tabs = emptyArray<View>()
+    private var fragments = emptyArray<Fragment>()
+    private var currentIndex = 0
+
+    private var ssoHandler: SsoHandler? = null
+    private var accessToken: Oauth2AccessToken? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initViews()
+        val token = AccessTokenKeeper.readAccessToken(this)
+        if(System.currentTimeMillis()>token.expiresTime){
+            loginWeiBo()
+        }else{
+            initViews()
+        }
+
     }
 
     private fun initViews() {
@@ -45,12 +64,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         for( v in clicks){
             v.setOnClickListener(this)
         }
+
+        initFragments()
+    }
+
+    private fun initFragments(){
         home = HomeFragment()
         message = MessageFragment()
         discover = DiscoverFragment()
         profile = ProfileFragment()
+        fragments = arrayOf(home,message,Fragment(),discover,profile)
         transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.layout_main_content,home,HomeFragment.HOME).commit()
+        transaction.add(R.id.layout_main_content,home,HomeFragment.HOME)
+        transaction.add(R.id.layout_main_content,message,MessageFragment.MESSAGE)
+        transaction.add(R.id.layout_main_content,discover,DiscoverFragment.DISCOVER)
+        transaction.add(R.id.layout_main_content,profile,ProfileFragment.PROFLIE)
+
+        transaction.hide(message)
+        transaction.hide(discover)
+        transaction.hide(profile)
+
+        transaction.commit()
+        refreshView(TAB_HOME)
+
 
     }
 
@@ -58,22 +94,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.layout_home_tab -> {
-                refreshView(TAB_HOME)
+                switchToFragment(TAB_HOME)
             }
 
             R.id.layout_message_tab -> {
-                refreshView(TAB_MESSAGE)
+                switchToFragment(TAB_MESSAGE)
             }
 
             R.id.layout_add_tab -> {
                 refreshView(TAB_ADD)
             }
             R.id.layout_discovery_tab -> {
-                refreshView(TAB_DISCOVER)
+                switchToFragment(TAB_DISCOVER)
             }
 
             R.id.layout_profile_tab -> {
-                refreshView(TAB_ME)
+                switchToFragment(TAB_ME)
             }
         }
 
@@ -86,8 +122,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun switchToFragment(index: Int){
-        transaction = supportFragmentManager.beginTransaction()
-        hideAllFragments(transaction)
+
+
+        if(currentIndex == index){
+
+        }else {
+            transaction = supportFragmentManager.beginTransaction()
+            hideAllFragments(transaction)
+            transaction.show(fragments[index])
+            currentIndex = index
+            refreshView(index)
+        }
+
 
 
 
@@ -100,5 +146,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         tsa.hide(profile)
         tsa.commit()
         refreshView(-1)
+    }
+
+
+    private fun loginWeiBo(){
+        if(ssoHandler == null){
+            ssoHandler = SsoHandler(this)
+        }
+        ssoHandler?.authorizeClientSso(this)
+    }
+
+
+    override fun onSuccess(token: Oauth2AccessToken?) {
+        this@MainActivity.runOnUiThread {
+            accessToken = token
+            if(accessToken!!.isSessionValid){
+                AccessTokenKeeper.writeAccessToken(this@MainActivity, accessToken)
+                initViews()
+            }
+        }
+    }
+
+    override fun onFailure(error: WbConnectErrorMessage?) {
+        Toast.makeText(this@MainActivity, error?.errorMessage, Toast.LENGTH_LONG).show()
+//        ssoHandler?.authorizeWeb(this@MainActivity)
+    }
+
+    override fun cancel() {
+        Toast.makeText(this@MainActivity, "Cancel OAuth!", Toast.LENGTH_LONG).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.wilson.funweibo.profile
 
+import com.wilson.funweibo.R
 import com.wilson.funweibo.base.BaseFragment
 
 /**
@@ -11,11 +12,13 @@ import com.wilson.funweibo.base.BaseFragment
  */
 class ProfileFragment: BaseFragment() {
 
+    companion object {
+        const val PROFLIE = "ProfileFragment"
+    }
     override fun inflate(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return R.layout.fragment_profile
     }
 
     override fun init() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

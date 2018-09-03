@@ -14,7 +14,7 @@ import com.wilson.funweibo.R
  * @Description：
  *
  */
-class WeiBoAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeiBoAdapter(private val context: Context?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
