@@ -1,5 +1,6 @@
 package com.wilson.funweibo.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -90,6 +91,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,WbAuthListener {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ssoHandler?.authorizeCallBack(requestCode,resultCode,data)
+    }
+
 
     override fun onClick(v: View?) {
         when(v?.id) {
@@ -153,7 +159,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,WbAuthListener {
         if(ssoHandler == null){
             ssoHandler = SsoHandler(this)
         }
-        ssoHandler?.authorizeClientSso(this)
+        ssoHandler?.authorize(this@MainActivity)
     }
 
 
@@ -163,13 +169,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,WbAuthListener {
             if(accessToken!!.isSessionValid){
                 AccessTokenKeeper.writeAccessToken(this@MainActivity, accessToken)
                 initViews()
+                Toast.makeText(this@MainActivity,
+                        "授权成功", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onFailure(error: WbConnectErrorMessage?) {
         Toast.makeText(this@MainActivity, error?.errorMessage, Toast.LENGTH_LONG).show()
-//        ssoHandler?.authorizeWeb(this@MainActivity)
     }
 
     override fun cancel() {
