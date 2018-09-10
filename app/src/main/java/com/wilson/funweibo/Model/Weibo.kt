@@ -1,4 +1,5 @@
-package com.wilson.funweibo.Model
+package com.wilson.funweibo.model
+
 
 data class Weibo(
         val created_at: String,
@@ -29,7 +30,7 @@ data class Weibo(
         val isLongText: Boolean,
         val hide_flag: Int,
         val mlevel: Int,
-        val visible: Visible,
+//        val visible: Visible,
         val biz_ids: List<Int>,
         val biz_feature: Long,
         val hasActionTypeCard: Int,

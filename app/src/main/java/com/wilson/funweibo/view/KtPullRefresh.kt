@@ -3,8 +3,10 @@ package com.wilson.funweibo.view
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,6 +16,8 @@ import android.widget.ImageView
 import android.widget.Scroller
 import com.wilson.funweibo.R
 import kotlinx.android.synthetic.main.refresh_header.view.*
+import org.jetbrains.anko.sdk25.coroutines.onTouch
+import kotlin.math.abs
 
 class KtPullRefresh: ViewGroup {
 
@@ -45,9 +49,32 @@ class KtPullRefresh: ViewGroup {
         LayoutInflater.from(context).inflate(R.layout.refresh_header, null)
 
     }
+
+    private var verticalY = 0f
     override fun onFinishInflate() {
         super.onFinishInflate()
         addView(headerView, LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,1000))
+//        val view = getChildAt(0)
+//        (view as? RecyclerView)?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                val s = view.canScrollVertically(-1)
+//                if(!s){
+//                    verticalY += dy
+//                    if(verticalY <= headerView.measuredHeight-100 && mStatus != Status.REFRESH){
+//                        Log.e("RESISTANCE","--onScrolled--$verticalY----")
+//                        scrollBy(0, verticalY.int(true))
+//                        if(verticalY <= EFFECTIVE_SCROLL){
+//                            updateHeaderView(Status.NORMAL)
+//                        }else {
+//                            updateHeaderView(Status.TRY_REFRESH)
+//                        }
+//                    }
+//                }
+//
+//            }
+//        })
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -78,29 +105,28 @@ class KtPullRefresh: ViewGroup {
         }
     }
 
-    private var oldInterceptY = 0f
-    private var shouldIntercept = false
+    private var lastMovedY = 0f
+    private var lastInterceptY = 0f
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-
-
+        var shouldIntercept = false
+        val absY = abs(scrollY)
+        Log.e("RESISTANCE","--onInterceptTouchEvent---${ev?.action}----")
         when(ev?.action) {
 
             MotionEvent.ACTION_DOWN -> {
 
-                oldInterceptY = ev.y
+                lastMovedY = ev.y
                 shouldIntercept = false
 
             }
 
             MotionEvent.ACTION_MOVE -> {
-                val offset = ev.y - oldInterceptY
-                if(offset > 0){
+                val offset = ev.y - lastInterceptY
+                if(offset > 0){//pull down
                     val child  = getChildAt(0)
                     if( child is RecyclerView) {
-                        if (child.computeVerticalScrollOffset()<=0){
-                            shouldIntercept = true
-                        }
+                        shouldIntercept = child.computeVerticalScrollOffset()<=0
                     }
 
                 }else {
@@ -111,28 +137,27 @@ class KtPullRefresh: ViewGroup {
 
             MotionEvent.ACTION_UP -> {
                 shouldIntercept = false
+                verticalY = 0f
             }
 
 
         }
-        oldInterceptY = ev!!.y
+        lastInterceptY = ev!!.y
 
         return shouldIntercept
     }
 
-    private var oldY = 0f
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val absY = Math.abs(scrollY)
+        Log.e("RESISTANCE","--onTouchEvent---${ev?.action}----")
         when(ev?.action) {
 
             MotionEvent.ACTION_DOWN -> {
-                oldY = ev.y
             }
 
             MotionEvent.ACTION_MOVE -> {
 
-
-                val offset = oldY - ev.y
+                val offset = lastMovedY - ev.y
                 if(offset < 0){
                     if(absY <= headerView.measuredHeight-100 && mStatus != Status.REFRESH){
                         scrollBy(0, offset.int(true))
@@ -154,7 +179,7 @@ class KtPullRefresh: ViewGroup {
                     }
 
                 }
-
+            lastMovedY = ev.y
             }
 
            MotionEvent.ACTION_UP -> {
@@ -170,8 +195,7 @@ class KtPullRefresh: ViewGroup {
            }
 
         }
-
-        oldY = ev!!.y
+        lastInterceptY = 0f
 
         return true
     }
@@ -208,6 +232,7 @@ class KtPullRefresh: ViewGroup {
             }
 
             Status.REFRESH -> {
+                initialResist = 1f
                 headerView.tv_header_text.text = "Loading"
                 headerView.iv_header_arrow.visibility = View.GONE
                 headerView.iv_header_loading.loading()
@@ -263,6 +288,8 @@ class KtPullRefresh: ViewGroup {
                 initialResist = 1.0f
             }
         }
-        return (this*initialResist).toInt()
+        val distance = (this*initialResist).toInt()
+
+        return distance
     }
 }

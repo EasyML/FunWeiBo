@@ -5,13 +5,9 @@ import android.util.Log
 import android.view.View
 import com.sina.weibo.sdk.auth.AccessTokenKeeper
 import com.sina.weibo.sdk.exception.WeiboException
-import com.sina.weibo.sdk.net.AsyncWeiboRunner
 import com.sina.weibo.sdk.net.RequestListener
-import com.sina.weibo.sdk.net.WeiboParameters
-import com.sina.weibo.sdk.network.ResponseCallback
 import com.wilson.funweibo.R
 import com.wilson.funweibo.base.BaseFragment
-import com.wilson.funweibo.base.Constant
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.*
 import org.jetbrains.anko.support.v4.onUiThread
@@ -42,18 +38,19 @@ class HomeFragment : BaseFragment(), View.OnClickListener,RequestListener {
     }
 
     private fun loadData() {
-        val token = AccessTokenKeeper.readAccessToken(context).token
+        val token = AccessTokenKeeper.readAccessToken(context)
 //        val params = WeiboParameters(Constant.APP_KEY)
 //        params.put("access_token", token)
 
-        val url = "https://api.weibo.com/2/statuses/home_timeline.json?access_token=$token"
+        val url = "https://api.weibo.com/2/statuses/home_timeline.json?access_token=${token.token}"
+        val show = "https://api.weibo.com/2/users/show.json?access_token=${token.token}&uid=${token.uid}"
         val okHttpClient = OkHttpClient.Builder().build()
-        val request = Request.Builder().url(url).get().build()
+        val request = Request.Builder().url(show).get().build()
 
         val call = okHttpClient.newCall(request)
         call.enqueue(object: Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("Response","----onFailure-----" )
+                Log.e("Response","----onFailure-----: ${e.message}" )
                 onUiThread {
                     ktp_home.stopRefresh()
                 }
@@ -69,13 +66,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener,RequestListener {
 
 
         })
-//        params.put("access_token", token)
-//        runner.requestAsync(
-//                url,
-//                params,
-//                "GET",
-//                this@HomeFragment
-//           )
 
     }
 

@@ -1,4 +1,5 @@
-package com.wilson.funweibo.Model
+package com.wilson.funweibo.model
+
 
 data class User(
         val id: Long,
@@ -30,7 +31,7 @@ data class User(
         val verified: Boolean,
         val verified_type: Int,
         val remark: String,
-        val insecurity: Insecurity,
+//        val insecurity: Insecurity,
         val ptype: Int,
         val allow_all_comment: Boolean,
         val avatar_large: String,
