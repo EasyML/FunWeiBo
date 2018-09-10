@@ -10,14 +10,23 @@
         android:id="@+id/include"
         layout="@layout/main_top_navigation_bar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyc_weibo_home"
+
+    <com.wilson.funweibo.view.KtPullRefresh
+        android:id="@+id/ktp_home"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyc_weibo_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+     />
+
+
+    </com.wilson.funweibo.view.KtPullRefresh>
 
 
 </android.support.constraint.ConstraintLayout>
